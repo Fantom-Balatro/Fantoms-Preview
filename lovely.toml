@@ -1,0 +1,47 @@
+[manifest]
+version = "1.0"
+dump_lua = true
+priority = 0
+
+# This manifest assumes the following release structure:
+#
+# DVSimulate/
+# ├─ Engine.lua
+# ├─ Init.lua
+# ├─ Utils.lua
+# ├─ Jokers/
+# │  ├─ _Vanilla.lua
+# │  ├─ etc.
+
+[[patches]]
+[patches.copy]
+target = "globals.lua"
+position = "append"
+sources = ["FNSimulate/Init.lua", "FNPreview/Init.lua", "FNPreview/Card.lua"]
+
+[[patches]]
+[patches.copy]
+target = "main.lua"
+position = "append"
+sources = ["FNPreview/Core.lua", "FNPreview/Utils.lua"]
+
+[[patches]]
+[patches.copy]
+target = "functions/common_events.lua"
+position = "append"
+sources = ["FNSimulate/Engine.lua", "FNSimulate/Utils.lua"]
+
+[[patches]]
+[patches.copy]
+target = "card.lua"
+position = "append"
+sources = [
+  "FNSimulate/Jokers/_Vanilla.lua",
+  "FNSimulate/Jokers/Multiplayer.lua",
+]
+
+[[patches]]
+[patches.copy]
+target = "functions/UI_definitions.lua"
+position = "append"
+sources = ["FNPreview/Interface.lua"]
