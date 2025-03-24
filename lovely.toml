@@ -5,31 +5,36 @@ priority = 0
 
 # This manifest assumes the following release structure:
 #
-# DVSimulate/
-# ├─ Engine.lua
-# ├─ Init.lua
-# ├─ Utils.lua
-# ├─ Jokers/
-# │  ├─ _Vanilla.lua
-# │  ├─ etc.
+# Fantoms-Preview/
+# ├─ FNPreview
+# ├─ FNSimulate
 
 [[patches]]
 [patches.copy]
 target = "globals.lua"
 position = "append"
-sources = ["FNSimulate/Init.lua", "FNPreview/Init.lua", "FNPreview/Card.lua"]
+sources = [ 
+  "FNSimulate/Init.lua",
+  "FNPreview/Init.lua"
+]
 
 [[patches]]
 [patches.copy]
 target = "main.lua"
 position = "append"
-sources = ["FNPreview/Core.lua", "FNPreview/Utils.lua"]
+sources = [
+  "FNPreview/Core.lua",
+  "FNPreview/Utils.lua"
+]
 
 [[patches]]
 [patches.copy]
 target = "functions/common_events.lua"
 position = "append"
-sources = ["FNSimulate/Engine.lua", "FNSimulate/Utils.lua"]
+sources = [
+  "FNSimulate/Engine.lua",
+  "FNSimulate/Utils.lua"
+]
 
 [[patches]]
 [patches.copy]
@@ -37,21 +42,21 @@ target = "card.lua"
 position = "append"
 sources = [
   "FNSimulate/Jokers/_Vanilla.lua",
-  "FNSimulate/Jokers/Multiplayer.lua",
+  "FNSimulate/Jokers/Multiplayer.lua"
 ]
 
 [[patches]]
 [patches.copy]
 target = "functions/UI_definitions.lua"
 position = "append"
-sources = ["FNPreview/Interface.lua"]
+sources = [ "FNPreview/Interface.lua" ]
 
 [[patches]]
 [patches.pattern]
 target = '''=[SMODS _ "src/overrides.lua"]'''
-pattern = "function get_straight(hand, min_length, skip, wrap)"
+pattern = "function Blind:debuff_hand(cards, hand, handname, check)"
 position = 'after'
 payload = '''
-hand = clean_hand(hand)
+do return debuff_hand(self, cards, hand, handname, check) end
 '''
 match_indent = true
