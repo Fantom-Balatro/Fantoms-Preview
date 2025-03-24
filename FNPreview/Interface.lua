@@ -20,7 +20,7 @@ end
 
 function DV.PRE.get_score_node()
    local text_scale = nil
-   if G.SETTINGS.DV.show_min_max then text_scale = 0.5
+   if true then text_scale = 0.5
    else text_scale = 0.75 end
 
    return {n = G.UIT.C, config = {id = "dv_pre_score", align = "cm"}, nodes={
@@ -88,25 +88,6 @@ function DV.get_preview_settings_page()
       G.HUD:recalculate()
    end
 
-   local function minmax_toggle_callback(_)
-      if not G.HUD or not DV.PRE.enabled() then return end
-
-      DV.PRE.data = DV.PRE.simulate()
-
-      if G.SETTINGS.DV.preview_score then
-         if not G.SETTINGS.DV.show_min_max then
-            -- Min-Max was just disabled, so increase scale:
-            G.HUD:get_UIE_by_ID("dv_pre_l").config.object.scale = 0.75
-            G.HUD:get_UIE_by_ID("dv_pre_r").config.object.scale = 0.75
-         else
-            -- Min-Max was just enabled, so decrease scale:
-            G.HUD:get_UIE_by_ID("dv_pre_l").config.object.scale = 0.5
-            G.HUD:get_UIE_by_ID("dv_pre_r").config.object.scale = 0.5
-         end
-         G.HUD:recalculate()
-      end
-   end
-
    return
       {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = G.C.CLEAR}, nodes={
           create_toggle({id = "score_toggle",
@@ -119,10 +100,6 @@ function DV.get_preview_settings_page()
                          ref_table = G.SETTINGS.DV,
                          ref_value = "preview_dollars",
                          callback = preview_dollars_toggle_callback}),
-          create_toggle({label = "Show Min/Max Preview Instead of Exact",
-                         ref_table = G.SETTINGS.DV,
-                         ref_value = "show_min_max",
-                         callback = minmax_toggle_callback}),
           create_toggle({label = "Hide Preview if Any Card is Face-Down",
                          ref_table = G.SETTINGS.DV,
                          ref_value = "hide_face_down",
