@@ -39,3 +39,13 @@ end
 function DV.PRE.enabled()
    return G.SETTINGS.DV.preview_score or G.SETTINGS.DV.preview_dollars
 end
+
+function clean_hand(hand)
+   local clean_hand = {}
+	for _, v in pairs(hand) do
+		if v.get_id then -- Should work for all functions even if they don't use get_id because get_id is a meta function and the broken cards don't have meta values
+			table.insert(clean_hand, v)
+		end
+	end
+   return clean_hand
+end
