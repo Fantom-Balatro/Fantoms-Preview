@@ -45,3 +45,13 @@ sources = [
 target = "functions/UI_definitions.lua"
 position = "append"
 sources = ["FNPreview/Interface.lua"]
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = "function get_straight(hand, min_length, skip, wrap)"
+position = 'after'
+payload = '''
+hand = clean_hand(hand)
+'''
+match_indent = true
