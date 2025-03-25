@@ -12,3 +12,10 @@ Dynamically updates score/money preview based on usee input such as selecting ca
 Displays a range of scores/money if luck based elements are present
 
 Compatibility with jokers specific to the popular multiplayer mod by Virtualized
+
+## Notice
+
+Does not work with modded jokers unless specifically implemented
+
+https://img.shields.io/github/downloads/fantom-balatro/Fantoms-Preview/total
+
