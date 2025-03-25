@@ -17,5 +17,3 @@ Compatibility with jokers specific to the popular multiplayer mod by Virtualized
 
 Does not work with modded jokers unless specifically implemented
 
-https://img.shields.io/github/downloads/fantom-balatro/Fantoms-Preview/total
-
