@@ -11,13 +11,13 @@ DVSJ.simulate_mp_taxes = function(joker_obj, context)
 end
 
 DVSJ.simulate_mp_pacifist = function(joker_obj, context)
-   if context.cardarea == G.jokers and context.global then
+   if context.cardarea == G.jokers and context.global and not MP.is_pvp_boss() then
       DV.SIM.x_mult(joker_obj.ability.extra.x_mult)
    end
 end
 
 DVSJ.simulate_mp_conjoined_joker = function(joker_obj, context)
-   if context.cardarea == G.jokers and context.global then
+   if context.cardarea == G.jokers and context.global and MP.is_pvp_boss() then
       DV.SIM.x_mult(joker_obj.ability.extra.x_mult)
    end
 end
@@ -37,8 +37,8 @@ DVSJ.simulate_mp_lets_go_gambling = function(joker_obj, context)
    if context.cardarea == G.jokers and context.global then
 
       local rand = pseudorandom("gambling") -- Must reuse same pseudorandom value:
-      local exact_xmult,  min_xmult, max_xmult = DV.SIM.get_probabilistic_extremes(rand, 4, 4, 1)
-      local exact_money,  min_money,  max_money  = DV.SIM.get_probabilistic_extremes(rand, 4, 10, 0)
+      local exact_xmult,  min_xmult, max_xmult = DV.SIM.get_probabilistic_extremes(rand, joker_obj.ability.extra.odds, joker_obj.ability.extra.xmult, 1)
+      local exact_money,  min_money,  max_money  = DV.SIM.get_probabilistic_extremes(rand, joker_obj.ability.extra.odds, joker_obj.ability.extra.dollars, 0)
 
       DV.SIM.add_dollars(exact_money, min_money, max_money)
       DV.SIM.x_mult(exact_xmult, min_xmult, max_xmult)
