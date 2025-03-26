@@ -1,10 +1,10 @@
---- Divvy's Simulation for Balatro - Init.lua
+--- Original: Divvy's Simulation for Balatro - Init.lua
 --
 -- Global values that must be present for the rest of this mod to work.
 
-if not DV then DV = {} end
+if not FN then FN = {} end
 
-DV.SIM = {
+FN.SIM = {
    JOKERS = {},
    
    running = {

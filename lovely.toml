@@ -5,17 +5,15 @@ priority = 0
 
 # This manifest assumes the following release structure:
 #
-# Fantoms-Preview/
-# ├─ FNPreview
-# ├─ FNSimulate
+# Fantoms-Preview
 
 [[patches]]
 [patches.copy]
 target = "globals.lua"
 position = "append"
 sources = [ 
-  "FNSimulate/Init.lua",
-  "FNPreview/Init.lua"
+  "InitSimulate.lua",
+  "InitPreview.lua"
 ]
 
 [[patches]]
@@ -23,8 +21,8 @@ sources = [
 target = "main.lua"
 position = "append"
 sources = [
-  "FNPreview/Core.lua",
-  "FNPreview/Utils.lua"
+  "CorePreview.lua",
+  "UtilsPreview.lua"
 ]
 
 [[patches]]
@@ -32,8 +30,8 @@ sources = [
 target = "functions/common_events.lua"
 position = "append"
 sources = [
-  "FNSimulate/Engine.lua",
-  "FNSimulate/Utils.lua"
+  "EngineSimulate.lua",
+  "UtilsSimulate.lua"
 ]
 
 [[patches]]
@@ -41,15 +39,15 @@ sources = [
 target = "card.lua"
 position = "append"
 sources = [
-  "FNSimulate/Jokers/_Vanilla.lua",
-  "FNSimulate/Jokers/Multiplayer.lua"
+  "Jokers/_Vanilla.lua",
+  "Jokers/Multiplayer.lua"
 ]
 
 [[patches]]
 [patches.copy]
 target = "functions/UI_definitions.lua"
 position = "append"
-sources = [ "FNPreview/Interface.lua" ]
+sources = [ "InterfacePreview.lua" ]
 
 [[patches]]
 [patches.pattern]
