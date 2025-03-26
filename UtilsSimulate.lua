@@ -1,50 +1,50 @@
---- Divvy's Simulation for Balatro - Utils.lua
+--- Original: Divvy's Simulation for Balatro - Utils.lua
 --
 -- Utilities for writing simulation functions for jokers.
 --
 -- In general, these functions replicate the game's internal calculations and
 -- variables in order to avoid affecting the game's state during simulation.
 -- These functions ensure that the score calculation remains identical to the
--- game; DO NOT directly modify the `DV.SIM.running` score variables.
+-- game; DO NOT directly modify the `FN.SIM.running` score variables.
 
 --
 -- HIGH-LEVEL:
 --
 
-function DV.SIM.JOKERS.add_suit_mult(joker_obj, context)
+function FN.SIM.JOKERS.add_suit_mult(joker_obj, context)
    if context.cardarea == G.play and context.individual then
-      if DV.SIM.is_suit(context.other_card, joker_obj.ability.extra.suit) and not context.other_card.debuff then
-         DV.SIM.add_mult(joker_obj.ability.extra.s_mult)
+      if FN.SIM.is_suit(context.other_card, joker_obj.ability.extra.suit) and not context.other_card.debuff then
+         FN.SIM.add_mult(joker_obj.ability.extra.s_mult)
       end
    end
 end
 
-function DV.SIM.JOKERS.add_type_mult(joker_obj, context)
+function FN.SIM.JOKERS.add_type_mult(joker_obj, context)
    if context.cardarea == G.jokers and context.global
       and next(context.poker_hands[joker_obj.ability.type])
    then
-      DV.SIM.add_mult(joker_obj.ability.t_mult)
+      FN.SIM.add_mult(joker_obj.ability.t_mult)
    end
 end
 
-function DV.SIM.JOKERS.add_type_chips(joker_obj, context)
+function FN.SIM.JOKERS.add_type_chips(joker_obj, context)
    if context.cardarea == G.jokers and context.global
       and next(context.poker_hands[joker_obj.ability.type])
    then
-      DV.SIM.add_chips(joker_obj.ability.t_chips)
+      FN.SIM.add_chips(joker_obj.ability.t_chips)
    end
 end
 
-function DV.SIM.JOKERS.x_mult_if_global(joker_obj, context)
+function FN.SIM.JOKERS.x_mult_if_global(joker_obj, context)
    if context.cardarea == G.jokers and context.global then
       if joker_obj.ability.x_mult > 1 and
          (joker_obj.ability.type == "" or next(context.poker_hands[joker_obj.ability.type])) then
-         DV.SIM.x_mult(joker_obj.ability.x_mult)
+         FN.SIM.x_mult(joker_obj.ability.x_mult)
       end
    end
 end
 
-function DV.SIM.get_probabilistic_extremes(random_value, odds, reward, default)
+function FN.SIM.get_probabilistic_extremes(random_value, odds, reward, default)
    -- Exact mirrors the game's probability calculation
    local exact = default
    if random_value < G.GAME.probabilities.normal/odds then
@@ -63,7 +63,7 @@ function DV.SIM.get_probabilistic_extremes(random_value, odds, reward, default)
    return exact, min, max
 end
 
-function DV.SIM.adjust_field_with_range(adj_func, field, mod_func, exact_value, min_value, max_value)
+function FN.SIM.adjust_field_with_range(adj_func, field, mod_func, exact_value, min_value, max_value)
    if not exact_value then error("Cannot adjust field, exact_value is missing.") end
 
    if not min_value or not max_value then
@@ -71,37 +71,37 @@ function DV.SIM.adjust_field_with_range(adj_func, field, mod_func, exact_value, 
       max_value = exact_value
    end
 
-   DV.SIM.running.min[field]   = mod_func(adj_func(DV.SIM.running.min[field],   min_value))
-   DV.SIM.running.exact[field] = mod_func(adj_func(DV.SIM.running.exact[field], exact_value))
-   DV.SIM.running.max[field]   = mod_func(adj_func(DV.SIM.running.max[field],   max_value))
+   FN.SIM.running.min[field]   = mod_func(adj_func(FN.SIM.running.min[field],   min_value))
+   FN.SIM.running.exact[field] = mod_func(adj_func(FN.SIM.running.exact[field], exact_value))
+   FN.SIM.running.max[field]   = mod_func(adj_func(FN.SIM.running.max[field],   max_value))
 end
 
-function DV.SIM.add_chips(exact, min, max)
-   DV.SIM.adjust_field_with_range(function(x, y) return x + y end, "chips", mod_chips, exact, min, max)
+function FN.SIM.add_chips(exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "chips", mod_chips, exact, min, max)
 end
 
-function DV.SIM.add_mult(exact, min, max)
-   DV.SIM.adjust_field_with_range(function(x, y) return x + y end, "mult", mod_mult, exact, min, max)
+function FN.SIM.add_mult(exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "mult", mod_mult, exact, min, max)
 end
 
-function DV.SIM.x_mult(exact, min, max)
-   DV.SIM.adjust_field_with_range(function(x, y) return x * y end, "mult", mod_mult, exact, min, max)
+function FN.SIM.x_mult(exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x * y end, "mult", mod_mult, exact, min, max)
 end
 
-function DV.SIM.add_dollars(exact, min, max)
+function FN.SIM.add_dollars(exact, min, max)
    -- NOTE: no mod_func for dollars, so have to declare an identity function
-   DV.SIM.adjust_field_with_range(function(x, y) return x + y end, "dollars", function(x) return x end, exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "dollars", function(x) return x end, exact, min, max)
 end
 
-function DV.SIM.add_reps(n)
-   DV.SIM.running.reps = DV.SIM.running.reps + n
+function FN.SIM.add_reps(n)
+   FN.SIM.running.reps = FN.SIM.running.reps + n
 end
 
 --
 -- LOW-LEVEL:
 --
 
-function DV.SIM.is_suit(card_data, suit, ignore_scorability)
+function FN.SIM.is_suit(card_data, suit, ignore_scorability)
    if card_data.debuff and not ignore_scorability then return end
    if card_data.ability.effect == "Stone Card" then
       return false
@@ -117,15 +117,15 @@ function DV.SIM.is_suit(card_data, suit, ignore_scorability)
    return card_data.suit == suit
 end
 
-function DV.SIM.get_rank(card_data)
+function FN.SIM.get_rank(card_data)
    if card_data.ability.effect == "Stone Card" and not card_data.vampired then
-      DV.SIM.misc.next_stone_id = DV.SIM.misc.next_stone_id - 1
-      return DV.SIM.misc.next_stone_id
+      FN.SIM.misc.next_stone_id = FN.SIM.misc.next_stone_id - 1
+      return FN.SIM.misc.next_stone_id
    end
    return card_data.rank
 end
 
-function DV.SIM.is_rank(card_data, ranks)
+function FN.SIM.is_rank(card_data, ranks)
    if card_data.ability.effect == "Stone Card" then return false end
 
    if type(ranks) == "number" then ranks = {ranks} end
@@ -135,7 +135,7 @@ function DV.SIM.is_rank(card_data, ranks)
    return false
 end
 
-function DV.SIM.check_rank_parity(card_data, check_even)
+function FN.SIM.check_rank_parity(card_data, check_even)
    if check_even then
       local is_even_numbered = (card_data.rank <= 10 and card_data.rank >= 0 and card_data.rank % 2 == 0)
       return is_even_numbered
@@ -146,11 +146,11 @@ function DV.SIM.check_rank_parity(card_data, check_even)
    end
 end
 
-function DV.SIM.is_face(card_data)
-   return (DV.SIM.is_rank(card_data, {11, 12, 13}) or next(find_joker("Pareidolia")))
+function FN.SIM.is_face(card_data)
+   return (FN.SIM.is_rank(card_data, {11, 12, 13}) or next(find_joker("Pareidolia")))
 end
 
-function DV.SIM.set_ability(card_data, center)
+function FN.SIM.set_ability(card_data, center)
    -- See Card:set_ability()
    card_data.ability = {
       name = center.name,
@@ -176,7 +176,7 @@ function DV.SIM.set_ability(card_data, center)
    }
 end
 
-function DV.SIM.set_edition(card_data, edition)
+function FN.SIM.set_edition(card_data, edition)
    card_data.edition = nil
    if not edition then return end
 
