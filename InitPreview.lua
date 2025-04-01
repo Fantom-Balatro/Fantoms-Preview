@@ -14,8 +14,41 @@ FN.PRE = {
       dollars = {top = "", bot = ""}
    },
    joker_order = {},
-   hand_order = {}
+   hand_order = {},
+   show_preview = false,
+   lock_updates = false,
+   on_startup = true,
+   five_second_coroutine = nil
 }
+
+function FN.PRE.start_new_coroutine()
+   if FN.PRE.five_second_coroutine and coroutine.status(FN.PRE.five_second_coroutine) ~= "dead" then
+      FN.PRE.five_second_coroutine = nil  -- Reset the coroutine
+   end
+
+   -- Create and start a new coroutine
+   FN.PRE.five_second_coroutine = coroutine.create(function()
+      -- Show UI updates
+      FN.PRE.lock_updates = true
+      FN.PRE.show_preview = true
+      FN.PRE.add_update_event("immediate")  -- Force UI refresh
+
+      local start_time = os.time()
+      while os.time() - start_time < 5 do
+         FN.PRE.simulate()  -- Force a simulation run
+         FN.PRE.add_update_event("immediate")  -- Ensure UI updates
+         coroutine.yield()  -- Allow game to continue running
+      end
+      -- Delay for 5 seconds
+      FN.PRE.lock_updates = false
+      FN.PRE.show_preview = true
+      FN.PRE.add_update_event("immediate")  -- Refresh UI again
+   end)
+
+   coroutine.resume(FN.PRE.five_second_coroutine)  -- Start it immediately
+end
+
+
 
 FN.PRE._start_up = Game.start_up
 function Game:start_up()

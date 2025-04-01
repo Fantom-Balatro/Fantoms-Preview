@@ -6,16 +6,40 @@
 local orig_hud = create_UIBox_HUD
 function create_UIBox_HUD()
    local contents = orig_hud()
+   
 
-   local score_node_wrap = {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.1}, nodes={}}
-   if G.SETTINGS.FN.preview_score then table.insert(score_node_wrap.nodes, FN.PRE.get_score_node()) end
+   local score_node_wrap = {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.05}, nodes={}}
+   table.insert(score_node_wrap.nodes, FN.PRE.get_score_node())
+   local calculate_score_button = {n = G.UIT.R,
+      config = {
+         align = "cm",
+         padding = 0.01,
+      },
+      nodes = {
+         UIBox_button({
+            id = "calculate_score_button",
+            label = {
+               "Calculate Score"
+            },
+            colour = G.C.RED,
+            button = "calculate_score_button",
+            scale = 0.5,
+         }),
+      },
+   }
+      
    table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, score_node_wrap)
+   table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, calculate_score_button)
 
-   local dollars_node_wrap = {n=G.UIT.C, config={id = "fn_pre_dollars_wrap", align = "cm"}, nodes={}}
+   --[[local dollars_node_wrap = {n=G.UIT.C, config={id = "fn_pre_dollars_wrap", align = "cm"}, nodes={}}
    if G.SETTINGS.FN.preview_dollars then table.insert(dollars_node_wrap.nodes, FN.PRE.get_dollars_node()) end
-   table.insert(contents.nodes[1].nodes[1].nodes[5].nodes[2].nodes[3].nodes[1].nodes[1].nodes[1].nodes, dollars_node_wrap)
+   table.insert(contents.nodes[1].nodes[1].nodes[5].nodes[2].nodes[3].nodes[1].nodes[1].nodes[1].nodes, dollars_node_wrap) --]]
 
    return contents
+end
+
+function G.FUNCS.calculate_score_button()
+   FN.PRE.start_new_coroutine()
 end
 
 function FN.PRE.get_score_node()
@@ -29,7 +53,7 @@ function FN.PRE.get_score_node()
    }}
 end
 
-function FN.PRE.get_dollars_node()
+--[[function FN.PRE.get_dollars_node()
    local top_color = FN.PRE.get_dollar_colour(0)
    local bot_color = top_color
    if FN.PRE.data ~= nil then
@@ -46,7 +70,7 @@ function FN.PRE.get_dollars_node()
            {n=G.UIT.O, config={id = "fn_pre_dollars_bot", func = "fn_pre_dollars_UI_set", object = DynaText({string = {{ref_table = FN.PRE.text.dollars, ref_value = "bot"}}, colours = {bot_color}, shadow = true, spacing = 2, bump = true, scale = 0.5})}},
        }}
    }}
-end
+end--]]
 
 --
 -- SETTINGS:
