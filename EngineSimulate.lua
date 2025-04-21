@@ -317,7 +317,7 @@ function FN.SIM.simulate_blind_debuffs()
       return false -- IMPORTANT: Avoid duplicate effects from Blind:debuff_hand() below
    end
 
-   return blind_obj:debuff_hand(FN.SIM.env.played_cards, FN.SIM.env.poker_hands, FN.SIM.env.scoring_name, true)
+   return blind_obj:debuff_hand(G.hand.highlighted, FN.SIM.env.poker_hands, FN.SIM.env.scoring_name, true)
 end
 
 --

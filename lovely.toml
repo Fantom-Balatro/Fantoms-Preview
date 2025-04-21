@@ -48,13 +48,3 @@ sources = [
 target = "functions/UI_definitions.lua"
 position = "append"
 sources = [ "InterfacePreview.lua" ]
-
-[[patches]]
-[patches.pattern]
-target = '''=[SMODS _ "src/overrides.lua"]'''
-pattern = "function Blind:debuff_hand(cards, hand, handname, check)"
-position = 'after'
-payload = '''
-do return debuff_hand(self, cards, hand, handname, check) end
-'''
-match_indent = true
