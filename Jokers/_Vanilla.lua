@@ -815,10 +815,10 @@ FNSJ.simulate_seeing_double = function(joker_obj, context)
       -- Let Wild Cards fill in the gaps:
       for _, card in ipairs(context.scoring_hand) do
          if card.ability.effect == "Wild Card" then
-            if     FN.SIM.is_suit(card, "Hearts")   and suit_count["Hearts"] == 0   then inc_suit("Hearts")
+            if     suit_count["Clubs"] == 0   then inc_suit("Clubs")
             elseif FN.SIM.is_suit(card, "Diamonds") and suit_count["Diamonds"] == 0 then inc_suit("Diamonds")
             elseif FN.SIM.is_suit(card, "Spades")   and suit_count["Spades"] == 0   then inc_suit("Spades")
-            elseif FN.SIM.is_suit(card, "Clubs")    and suit_count["Clubs"] == 0    then inc_suit("Clubs")
+            elseif FN.SIM.is_suit(card, "Hearts")    and suit_count["Hearts"] == 0    then inc_suit("Hearts")
             end
          end
       end
