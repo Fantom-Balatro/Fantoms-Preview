@@ -805,26 +805,27 @@ FNSJ.simulate_seeing_double = function(joker_obj, context)
       -- Account for all 'real' suits:
       for _, card in ipairs(context.scoring_hand) do
          if card.ability.effect ~= "Wild Card" then
-            if FN.SIM.is_suit(card, "Hearts")   then inc_suit("Hearts") end
-            if FN.SIM.is_suit(card, "Diamonds") then inc_suit("Diamonds") end
-            if FN.SIM.is_suit(card, "Spades")   then inc_suit("Spades") end
-            if FN.SIM.is_suit(card, "Clubs")    then inc_suit("Clubs") end
+            if DV.SIM.is_suit(card, "Hearts")   then inc_suit("Hearts") end
+            if DV.SIM.is_suit(card, "Diamonds") then inc_suit("Diamonds") end
+            if DV.SIM.is_suit(card, "Spades")   then inc_suit("Spades") end
+            if DV.SIM.is_suit(card, "Clubs")    then inc_suit("Clubs") end
          end
       end
 
       -- Let Wild Cards fill in the gaps:
       for _, card in ipairs(context.scoring_hand) do
          if card.ability.effect == "Wild Card" then
-            if     suit_count["Clubs"] == 0   then inc_suit("Clubs")
-            elseif FN.SIM.is_suit(card, "Diamonds") and suit_count["Diamonds"] == 0 then inc_suit("Diamonds")
-            elseif FN.SIM.is_suit(card, "Spades")   and suit_count["Spades"] == 0   then inc_suit("Spades")
-            elseif FN.SIM.is_suit(card, "Hearts")    and suit_count["Hearts"] == 0    then inc_suit("Hearts")
+            -- IMPORTANT: Clubs must come first here, because Clubs are required for xmult. This is in line with game's implementation.
+            if     DV.SIM.is_suit(card, "Clubs")    and suit_count["Clubs"] == 0    then inc_suit("Clubs")
+            elseif DV.SIM.is_suit(card, "Hearts")   and suit_count["Hearts"] == 0   then inc_suit("Hearts")
+            elseif DV.SIM.is_suit(card, "Diamonds") and suit_count["Diamonds"] == 0 then inc_suit("Diamonds")
+            elseif DV.SIM.is_suit(card, "Spades")   and suit_count["Spades"] == 0   then inc_suit("Spades")
             end
          end
       end
 
       if suit_count["Clubs"] > 0 and (suit_count["Hearts"] > 0 or suit_count["Diamonds"] > 0 or suit_count["Spades"] > 0) then
-         FN.SIM.x_mult(joker_obj.ability.extra)
+         DV.SIM.x_mult(joker_obj.ability.extra)
       end
    end
 end

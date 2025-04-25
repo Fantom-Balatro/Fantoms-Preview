@@ -8,28 +8,13 @@ function create_UIBox_HUD()
    local contents = orig_hud()
    
 
-   local score_node_wrap = {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.05}, nodes={}}
+   local score_node_wrap = {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.1}, nodes={}}
    table.insert(score_node_wrap.nodes, FN.PRE.get_score_node())
-   local calculate_score_button = {n = G.UIT.R,
-      config = {
-         align = "cm",
-         padding = 0.01,
-      },
-      nodes = {
-         UIBox_button({
-            id = "calculate_score_button",
-            label = {
-               "Calculate Score"
-            },
-            colour = G.C.RED,
-            button = "calculate_score_button",
-            scale = 0.5,
-         }),
-      },
-   }
+   local calculate_score_button_wrap = {n=G.UIT.R, config={id = "fn_calculate_score_button_wrap", align = "cm", padding = 0.1}, nodes={}}
+   table.insert(calculate_score_button_wrap.nodes, FN.PRE.get_calculate_score_button())
       
    table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, score_node_wrap)
-   table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, calculate_score_button)
+   table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, calculate_score_button_wrap)
 
    --[[local dollars_node_wrap = {n=G.UIT.C, config={id = "fn_pre_dollars_wrap", align = "cm"}, nodes={}}
    if G.SETTINGS.FN.preview_dollars then table.insert(dollars_node_wrap.nodes, FN.PRE.get_dollars_node()) end
@@ -41,6 +26,16 @@ end
 function G.FUNCS.calculate_score_button()
    FN.PRE.start_new_coroutine()
 end
+
+function FN.PRE.get_calculate_score_button()
+
+   return {n=G.UIT.C, config={id = "calculate_score_button", button = "calculate_score_button", align = "cm", minh = 0.42, padding = 0.05, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
+      {n=G.UIT.R, config={align = "cm"}, nodes={
+         {n=G.UIT.T, config={text = "  Calculate Score  ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
+      }}
+   }}
+end
+
 
 function FN.PRE.get_score_node()
    local text_scale = nil
