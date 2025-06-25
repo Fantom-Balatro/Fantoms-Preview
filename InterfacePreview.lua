@@ -12,6 +12,7 @@ function create_UIBox_HUD()
    table.insert(score_node_wrap.nodes, FN.PRE.get_score_node())
    local calculate_score_button_wrap = {n=G.UIT.R, config={id = "fn_calculate_score_button_wrap", align = "cm", padding = 0.1}, nodes={}}
    table.insert(calculate_score_button_wrap.nodes, FN.PRE.get_calculate_score_button())
+   table.insert(calculate_score_button_wrap.nodes, FN.PRE.get_misprint_button())
       
    table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, score_node_wrap)
    table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, calculate_score_button_wrap)
@@ -27,14 +28,27 @@ function G.FUNCS.calculate_score_button()
    FN.PRE.start_new_coroutine()
 end
 
+function G.FUNCS.misprint_button()
+   FN.PRE.start_new_misprint_coroutine()
+end
+
 function FN.PRE.get_calculate_score_button()
 
    return {n=G.UIT.C, config={id = "calculate_score_button", button = "calculate_score_button", align = "cm", minh = 0.42, padding = 0.05, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
       {n=G.UIT.R, config={align = "cm"}, nodes={
-         {n=G.UIT.T, config={text = "  Calculate Score  ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
+         {n=G.UIT.T, config={text = " Calculate Score ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
       }}
    }}
 end
+
+function FN.PRE.get_misprint_button()
+   return {n=G.UIT.C, config={id = "misprint_button", button = "misprint_button", align = "cm", minh = 0.42, padding = 0.05, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
+      {n=G.UIT.R, config={align = "cm"}, nodes={
+         {n=G.UIT.T, config={text = " Topdeck ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
+      }}
+   }}
+end
+
 
 
 function FN.PRE.get_score_node()

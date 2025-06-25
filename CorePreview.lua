@@ -17,6 +17,9 @@ function FN.PRE.simulate()
    if FN.PRE.five_second_coroutine and coroutine.status(FN.PRE.five_second_coroutine) == "suspended" then
       coroutine.resume(FN.PRE.five_second_coroutine)
    end
+   if FN.PRE.four_second_coroutine and coroutine.status(FN.PRE.four_second_coroutine) == "suspended" then
+      coroutine.resume(FN.PRE.four_second_coroutine)
+   end
    if not (G.STATE == G.STATES.SELECTING_HAND or
            G.STATE == G.STATES.DRAW_TO_HAND or
            G.STATE == G.STATES.PLAY_TAROT)
@@ -170,13 +173,17 @@ function G.FUNCS.fn_pre_score_UI_set(e)
    local new_preview_text = ""
    local should_juice = false
    if FN.PRE.lock_updates then 
-      if e.config.id == "fn_pre_l" then
+      if e.config.id == "fn_pre_l" and not FN.PRE.is_misprint then
          new_preview_text = " CALCULATING "
+         should_juice = true
+      end
+      if e.config.id == "fn_pre_l" and FN.PRE.is_misprint then
+         new_preview_text = " CHECKING "
          should_juice = true
       end
    else  
       if FN.PRE.data then
-         if FN.PRE.show_preview and (FN.PRE.data.score.min ~= FN.PRE.data.score.max) then
+         if FN.PRE.show_preview and (FN.PRE.data.score.min ~= FN.PRE.data.score.max) and not FN.PRE.is_misprint then
             -- Format as 'X - Y' :
             if e.config.id == "fn_pre_l" then
                new_preview_text = FN.PRE.format_number(FN.PRE.data.score.min) .. " - "
@@ -192,8 +199,30 @@ function G.FUNCS.fn_pre_score_UI_set(e)
                   -- Spaces around number necessary to distinguish Min/Max text from Exact text,
                   -- which is itself necessary to force a HUD update when switching between Min/Max and Exact.
                   if FN.PRE.show_preview then 
-                     new_preview_text = " " .. FN.PRE.format_number(FN.PRE.data.score.min) .. " "
-                     if FN.PRE.is_enough_to_win(FN.PRE.data.score.min) then should_juice = true end
+                     if not FN.PRE.is_misprint then
+                        new_preview_text = " " .. FN.PRE.format_number(FN.PRE.data.score.min) .. " "
+                        if FN.PRE.is_enough_to_win(FN.PRE.data.score.min) then should_juice = true end
+                     
+                     else
+                        local rank_names = {
+                           ["11"] = "Jack",
+                           ["12"] = "Queen",
+                           ["13"] = "King",
+                           ["14"] = "Ace"
+                        }
+                        local suit_names = {
+                           H = "Hearts",
+                           S = "Spades",
+                           C = "Clubs",
+                           D = "Diamonds"
+                        }
+                        local card_rank_raw = tostring(G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.id or 11)
+                        local card_rank = rank_names[card_rank_raw] or card_rank_raw
+                        local card_suit_raw = (G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.suit:sub(1,1) or 'D')
+                        local card_suit = suit_names[card_suit_raw] or card_suit_raw
+                        new_preview_text = " " .. card_rank .. " of " .. card_suit .. " "
+                        should_juice = false
+                     end
                   else
                      if FN.PRE.is_enough_to_win(FN.PRE.data.score.min) then 
                         should_juice = true
