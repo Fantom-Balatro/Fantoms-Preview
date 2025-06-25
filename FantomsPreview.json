@@ -9,7 +9,7 @@
 	"prefix": "fn",
 	"main_file": "CorePreview.lua",
 	"priority": 0,
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"dependencies": [],
 	"conflicts": []
 }
