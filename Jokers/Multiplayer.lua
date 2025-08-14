@@ -44,3 +44,12 @@ FNSJ.simulate_mp_lets_go_gambling = function(joker_obj, context)
       FN.SIM.x_mult(exact_xmult, min_xmult, max_xmult)
    end
 end
+
+FNSJ.simulate_mp_bloodstone = function(joker_obj, context)
+   if context.cardarea == G.play and context.individual then
+      if FN.SIM.is_suit(context.other_card, "Hearts") and not context.other_card.debuff then
+         local exact_xmult, min_xmult, max_xmult = FN.SIM.get_probabilistic_extremes(pseudorandom("nopeagain"), joker_obj.ability.extra.odds, joker_obj.ability.extra.Xmult, 1)
+         FN.SIM.x_mult(exact_xmult, min_xmult, max_xmult)
+      end
+   end
+end
