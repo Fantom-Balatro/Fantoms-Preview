@@ -76,16 +76,28 @@ function FN.SIM.adjust_field_with_range(adj_func, field, mod_func, exact_value, 
    FN.SIM.running.max[field]   = mod_func(adj_func(FN.SIM.running.max[field],   max_value))
 end
 
+
+-- local copies of the functions in functions/misc_functions.lua to avoid ui updates from steamodded patches to these functions.
+function FN.SIM.mod_chips(_chips)
+   if G.GAME.modifiers.chips_dollar_cap then
+      _chips = math.min(_chips, math.max(G.GAME.dollars, 0))
+   end
+   return _chips
+end
+function FN.SIM.mod_mult(_mult)
+   return _mult
+end
+
 function FN.SIM.add_chips(exact, min, max)
-   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "chips", mod_chips, exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "chips", FN.SIM.mod_chips, exact, min, max)
 end
 
 function FN.SIM.add_mult(exact, min, max)
-   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "mult", mod_mult, exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x + y end, "mult", FN.SIM.mod_mult, exact, min, max)
 end
 
 function FN.SIM.x_mult(exact, min, max)
-   FN.SIM.adjust_field_with_range(function(x, y) return x * y end, "mult", mod_mult, exact, min, max)
+   FN.SIM.adjust_field_with_range(function(x, y) return x * y end, "mult", FN.SIM.mod_mult, exact, min, max)
 end
 
 function FN.SIM.add_dollars(exact, min, max)
