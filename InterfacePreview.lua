@@ -7,14 +7,9 @@ local orig_hud = create_UIBox_HUD
 function create_UIBox_HUD()
    local contents = orig_hud()
    
-
-   local score_node_wrap = {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.1}, nodes={}}
-   table.insert(score_node_wrap.nodes, FN.PRE.get_score_node())
-   local calculate_score_button_wrap = {n=G.UIT.R, config={id = "fn_calculate_score_button_wrap", align = "cm", padding = 0.1}, nodes={}}
-   table.insert(calculate_score_button_wrap.nodes, FN.PRE.get_calculate_score_button())
-      
-   table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, score_node_wrap)
-   table.insert(contents.nodes[1].nodes[1].nodes[4].nodes[1].nodes, calculate_score_button_wrap)
+   local hand_text_area = FN.PRE.find_hand_text_area(contents)
+   if not hand_text_area then return contents end
+   table.insert(hand_text_area.nodes[1].nodes, FN.PRE.get_preview_container())
 
    --[[local dollars_node_wrap = {n=G.UIT.C, config={id = "fn_pre_dollars_wrap", align = "cm"}, nodes={}}
    if G.SETTINGS.FN.preview_dollars then table.insert(dollars_node_wrap.nodes, FN.PRE.get_dollars_node()) end
@@ -27,8 +22,20 @@ function G.FUNCS.calculate_score_button()
    FN.PRE.start_new_coroutine()
 end
 
-function FN.PRE.get_calculate_score_button()
+function FN.PRE.get_preview_container()
+   return {n=G.UIT.R, config={id = "fn_preview_container", align = "cm"}, nodes={
+      {n=G.UIT.C, config={align = "cm"}, nodes={
+         {n=G.UIT.R, config={id = "fn_pre_score_wrap", align = "cm", padding = 0.1}, nodes={
+            FN.PRE.get_score_node()
+         }},
+         {n=G.UIT.R, config={id = "fn_calculate_score_button_wrap", align = "cm", padding = 0.1}, nodes={
+            FN.PRE.get_calculate_score_button()
+         }}
+      }}
+   }}
+end
 
+function FN.PRE.get_calculate_score_button()
    return {n=G.UIT.C, config={id = "calculate_score_button", button = "calculate_score_button", align = "cm", minh = 0.42, padding = 0.05, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
       {n=G.UIT.R, config={align = "cm"}, nodes={
          {n=G.UIT.T, config={text = "  Calculate Score  ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
@@ -46,6 +53,19 @@ function FN.PRE.get_score_node()
               {n=G.UIT.O, config={id = "fn_pre_l", func = "fn_pre_score_UI_set", object = DynaText({string = {{ref_table = FN.PRE.text.score, ref_value = "l"}}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, float = true, scale = text_scale})}},
               {n=G.UIT.O, config={id = "fn_pre_r", func = "fn_pre_score_UI_set", object = DynaText({string = {{ref_table = FN.PRE.text.score, ref_value = "r"}}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, float = true, scale = text_scale})}},
    }}
+end
+
+function FN.PRE.find_hand_text_area(node)
+   if node.config and node.config.id == "hand_text_area" then
+      return node
+   end
+   if node.nodes then
+      for _, child in ipairs(node.nodes) do
+         local found = FN.PRE.find_hand_text_area(child, id)
+         if found then return found end
+      end
+   end
+   return nil
 end
 
 --[[function FN.PRE.get_dollars_node()
