@@ -2,6 +2,10 @@
 --
 -- Utilities for checking states and formatting display.
 
+function FN.PRE.is_last_hand()
+   return G.GAME and G.GAME.current_round and G.GAME.current_round.hands_left == 1
+end
+
 function FN.PRE.is_enough_to_win(chips)
    if G.GAME.blind and
       (G.STATE == G.STATES.SELECTING_HAND or
@@ -15,7 +19,7 @@ end
 function FN.PRE.format_number(num)
    if not num or type(num) ~= 'number' then return num or '' end
    -- Start using e-notation earlier to reduce number length, if showing min and max for preview:
-   if true and num >= 1e7 then
+   if true and num >= (G.E_SWITCH_POINT or 1e11) then
       local x = string.format("%.4g",num)
       local fac = math.floor(math.log(tonumber(x), 10))
       return string.format("%.2f",x/(10^fac))..'e'..fac
