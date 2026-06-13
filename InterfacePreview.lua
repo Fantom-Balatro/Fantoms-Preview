@@ -19,7 +19,17 @@ function create_UIBox_HUD()
 end
 
 function G.FUNCS.calculate_score_button()
-   FN.PRE.start_new_coroutine()
+   FN.PRE.auto_calculate = not FN.PRE.auto_calculate
+if FN.PRE.auto_calculate then
+      FN.PRE.show_preview = G.hand ~= nil and #G.hand.highlighted > 0
+   else
+      FN.PRE.show_preview = false
+   end
+   FN.PRE.add_update_event("immediate")
+end
+
+function G.FUNCS.calculate_score_button_UI_set(e)
+   e.config.colour = FN.PRE.auto_calculate and G.C.RED or G.C.GREY
 end
 
 function FN.PRE.get_preview_container()
@@ -36,9 +46,9 @@ function FN.PRE.get_preview_container()
 end
 
 function FN.PRE.get_calculate_score_button()
-   return {n=G.UIT.C, config={id = "calculate_score_button", button = "calculate_score_button", align = "cm", minh = 0.42, padding = 0.05, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
+   return {n=G.UIT.C, config={id = "calculate_score_button", button = "calculate_score_button", func = "calculate_score_button_UI_set", align = "cm", minh = 0.55, padding = 0.12, r = 0.02, colour = G.C.RED, hover = true, shadow = true}, nodes={
       {n=G.UIT.R, config={align = "cm"}, nodes={
-         {n=G.UIT.T, config={text = "  Calculate Score  ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.36}}
+         {n=G.UIT.T, config={text = "  Autocalculate Score  ", colour = G.C.UI.TEXT_LIGHT, shadow = true, scale = 0.4}}
       }}
    }}
 end
